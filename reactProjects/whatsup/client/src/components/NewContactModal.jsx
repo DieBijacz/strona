@@ -5,11 +5,12 @@ import { useContacts } from '../context/ContactsProvider'
 const NewContactModal = ({ closeModal }) => {
   const idRef = useRef()
   const nameRef = useRef()
-  const { createContact } = useContacts
+
+  const { createContact } = useContacts()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // createContact(idRef.current.value, nameRef.current.value)
+    createContact(idRef.current.value, nameRef.current.value)
     closeModal()
   }
 

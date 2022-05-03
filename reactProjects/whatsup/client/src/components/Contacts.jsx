@@ -1,8 +1,20 @@
 import React from 'react'
+import { useContacts } from '../context/ContactsProvider'
+import { ListGroup } from 'react-bootstrap'
+
+// TODO delete contact
 
 const Contacts = () => {
+  const { contacts } = useContacts()
+
   return (
-    <div>Contacts</div>
+    <ListGroup variant='flush'>
+      {contacts.map(contact => (
+        <ListGroup.Item key={contact.id}>
+          {contact.name}
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
   )
 }
 
