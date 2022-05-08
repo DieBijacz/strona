@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useContacts } from './ContactsProvider'
 
@@ -11,6 +11,8 @@ export function useConversations() {
 export function ConversationProvider({ children }) {
   // use localStorage to bring contacts if there are any and sets a new ones
   const [conversations, setConversations] = useLocalStorage('conversation', [])
+  const [selectedConversation, setSelectedConversation] = useState(0)
+
   const { contacts } = useContacts()
 
   // add new contact to local storage
@@ -21,7 +23,7 @@ export function ConversationProvider({ children }) {
   }
 
   // format contacts in conversation so instead of just id will be {id, name}
-  const formattedConversations = conversations.map(conversation => {
+  const formattedConversations = conversations.map((conversation, index) => {
     // for each conversation and in recipient in them
     const recipients = conversation.recipients.map(recipient => {
       // find in contacts that user
@@ -32,13 +34,19 @@ export function ConversationProvider({ children }) {
       const name = (contact && contact.name) || recipient
       return { id: recipient, name }
     })
+
+    // returns true if selectedConversation index === index of that conversation
+    const selected = index === selectedConversation
+
     // return conversations with formatted recipients
-    return { ...conversation, recipients }
+    return { ...conversation, recipients, selected }
   })
 
   const value = {
     conversations: formattedConversations,
-    createConversation
+    selectedConversation: formattedConversations[selectedConversation],
+    createConversation,
+    selectConversation: setSelectedConversation
   }
 
   return (
