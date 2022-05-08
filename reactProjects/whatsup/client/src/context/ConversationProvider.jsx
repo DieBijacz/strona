@@ -4,7 +4,7 @@ import { useContacts } from './ContactsProvider'
 
 const ConversationContext = React.createContext()
 
-export function useConversation() {
+export function useConversations() {
   return useContext(ConversationContext)
 }
 

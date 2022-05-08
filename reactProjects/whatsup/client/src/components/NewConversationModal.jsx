@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import { useContacts } from '../context/ContactsProvider'
-import { useConversation } from '../context/ConversationProvider'
+import { useConversations } from '../context/ConversationProvider'
 
 const NewConversationModal = ({ closeModal }) => {
   const { contacts } = useContacts()
-  const { createConversation } = useConversation()
+  const { createConversation } = useConversations()
 
   const [selectedContactIds, setSelectedContactIds] = useState([])
 
