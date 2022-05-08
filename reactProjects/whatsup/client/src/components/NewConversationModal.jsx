@@ -9,13 +9,15 @@ const NewConversationModal = ({ closeModal }) => {
 
   const [selectedContactIds, setSelectedContactIds] = useState([])
 
+  // array of selected contacts for new conversation
   function handleCheckboxChange(id) {
+    // if there is passed contact id already in state then remove it, else add it
     setSelectedContactIds(prev => prev.includes(id) ? prev.filter(contactId => contactId !== id) : [...prev, id])
   }
 
   function handleSubmit(e) {
     e.preventDefault()
-    createConversation(selectedContactIds)
+    createConversation(selectedContactIds) //creates conversation with passed array of contacts
     closeModal()
   }
 
