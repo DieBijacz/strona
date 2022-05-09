@@ -8,21 +8,51 @@ export function useConversations() {
   return useContext(ConversationContext)
 }
 
-export function ConversationProvider({ children }) {
+export function ConversationProvider({ id, children }) {
   // use localStorage to bring contacts if there are any and sets a new ones
   const [conversations, setConversations] = useLocalStorage('conversation', [])
   const [selectedConversation, setSelectedConversation] = useState(0)
 
   const { contacts } = useContacts()
 
-  // add new contact to local storage
+  // CREATE CONVERSATION
   function createConversation(recipients) {
+    // set it in local storage
     setConversations(prev => {
       return [...prev, { recipients, messages: [] }]
     })
   }
 
-  // format contacts in conversation so instead of just id will be {id, name}
+  // SEND MESSAGE sends from user and to user
+  function addMessageToConversation({ recipients, text, sender }) {
+    setConversations(prev => {
+      let madeChange = false // will determinate if this is a new conversation
+      const newMessage = { sender, text }
+
+      // check if there is conversation with passed in recipients
+      const newConversations = prev.map(conversation => {
+        if (arrayEquality(conversation.recipients, recipients)) { //checks if array of passed recipients is equal to any conversation
+          madeChange = true
+          return { ...conversation, messages: [...conversation.messages, newMessage] } // add new message to previous conversation
+        }
+        return conversation
+      })
+
+      if (madeChange) {
+        return newConversations
+      } else {
+        // if !madeChange then create new conversation with new message
+        return [...prev, { recipients, messages: [newMessage] }]
+      }
+    })
+
+  }
+
+  function sendMessage(recipients, text) {
+    addMessageToConversation({ recipients, text, sender: id })
+  }
+
+  // FORMAT CONTACTS in conversation so instead of just id will be {id, name}
   const formattedConversations = conversations.map((conversation, index) => {
     // for each conversation and in recipient in them
     const recipients = conversation.recipients.map(recipient => {
@@ -44,9 +74,10 @@ export function ConversationProvider({ children }) {
 
   const value = {
     conversations: formattedConversations,
-    selectedConversation: formattedConversations[selectedConversation],
+    selectedConversation: formattedConversations[selectedConversation], //returns conversation based on index
+    selectConversation: setSelectedConversation, //sets index
     createConversation,
-    selectConversation: setSelectedConversation
+    sendMessage
   }
 
   return (
@@ -57,3 +88,15 @@ export function ConversationProvider({ children }) {
   )
 }
 
+function arrayEquality(a, b) {
+  if (a.length !== b.length) return false
+
+  a.sort()
+  b.sort()
+
+  // check if every element in sortet arrays are same on same index
+  return a.every((element, index) => {
+    return element === b[index]
+  })
+
+}

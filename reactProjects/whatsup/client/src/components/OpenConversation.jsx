@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Form, FormGroup, InputGroup } from 'react-bootstrap'
+import { useConversations } from '../context/ConversationProvider'
 
 const OpenConversation = () => {
   const [text, setText] = useState('')
+  const { sendMessage, selectedConversation } = useConversations()
 
   function handleSubmit(e) {
     e.preventDefault()
+    sendMessage(selectedConversation.recipients.map(r => r.id), text)
     setText('')
   }
 

@@ -10,7 +10,7 @@ function App() {
 
   const dashborad = (
     <ContactsProvider>
-      <ConversationProvider>
+      <ConversationProvider id={id}>
         <Dashboard id={id} />
       </ConversationProvider>
     </ContactsProvider>
