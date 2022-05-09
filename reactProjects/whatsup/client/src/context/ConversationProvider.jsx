@@ -52,9 +52,10 @@ export function ConversationProvider({ id, children }) {
     addMessageToConversation({ recipients, text, sender: id })
   }
 
-  // FORMAT CONTACTS in conversation so instead of just id will be {id, name}
+  //! FORMAT CONVERSATION
   const formattedConversations = conversations.map((conversation, index) => {
-    // for each conversation and in recipient in them
+
+    // FORMAT RECIPIENTS
     const recipients = conversation.recipients.map(recipient => {
       // find in contacts that user
       const contact = contacts.find(contact => {
@@ -65,11 +66,20 @@ export function ConversationProvider({ id, children }) {
       return { id: recipient, name }
     })
 
-    // returns true if selectedConversation index === index of that conversation
+    // FORMAT MESSAGES
+    const messages = conversation.messages.map(message => {
+      const contact = contacts.find(contact => {
+        return contact.id === message.sender
+      })
+      const name = (contact && contact.name) || message.sender
+      const fromMe = id === message.sender
+      return { ...message, senderName: name, fromMe }
+    })
+
+    // SELECTED -> returns true if selectedConversation index === index of that conversation
     const selected = index === selectedConversation
 
-    // return conversations with formatted recipients
-    return { ...conversation, recipients, selected }
+    return { ...conversation, messages, recipients, selected }
   })
 
   const value = {
