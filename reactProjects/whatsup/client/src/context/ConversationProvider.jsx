@@ -1,6 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useContacts } from './ContactsProvider'
+import { useSocket } from './SocketProvider'
 
 const ConversationContext = React.createContext()
 
@@ -13,9 +14,10 @@ export function ConversationProvider({ id, children }) {
   const [conversations, setConversations] = useLocalStorage('conversation', [])
   const [selectedConversation, setSelectedConversation] = useState(0)
 
+  const socket = useSocket()
   const { contacts } = useContacts()
 
-  // CREATE CONVERSATION
+  //! CREATE CONVERSATION
   function createConversation(recipients) {
     // set it in local storage
     setConversations(prev => {
@@ -23,32 +25,67 @@ export function ConversationProvider({ id, children }) {
     })
   }
 
-  // SEND MESSAGE sends from user and to user
-  function addMessageToConversation({ recipients, text, sender }) {
-    setConversations(prev => {
-      let madeChange = false // will determinate if this is a new conversation
-      const newMessage = { sender, text }
+  //! ADD MESSAGE
+  // const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
+  //   setConversations(prevConversations => {
+  //     let madeChange = false // will determinate if this is a new conversation
+  //     const newMessage = { sender, text }
 
-      // check if there is conversation with passed in recipients
-      const newConversations = prev.map(conversation => {
-        if (arrayEquality(conversation.recipients, recipients)) { //checks if array of passed recipients is equal to any conversation
+  //     // check if there is conversation with passed in recipients
+  //     const newConversations = prevConversations.map(conversation => {
+  //       if (arrayEquality(conversation.recipients, recipients)) { //checks if array of passed recipients is equal to any conversation
+  //         madeChange = true
+  //         console.log('old')
+  //         return { ...conversation, messages: [...conversation.messages, newMessage] } // add new message to previous conversation
+  //       }
+  //       return conversation
+  //     })
+
+  //     if (madeChange) {
+  //       console.log('new')
+  //       return newConversations
+  //     } else {
+  //       // if !madeChange then create new conversation with new message
+  //       return [...prevConversations, { recipients, messages: [newMessage] }]
+  //     }
+  //   })
+  // }, [setConversations])
+  const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
+    setConversations(prevConversations => {
+      let madeChange = false
+      const newMessage = { sender, text }
+      const newConversations = prevConversations.map(conversation => {
+        if (arrayEquality(conversation.recipients, recipients)) {
           madeChange = true
-          return { ...conversation, messages: [...conversation.messages, newMessage] } // add new message to previous conversation
+          return {
+            ...conversation,
+            messages: [...conversation.messages, newMessage]
+          }
         }
+
         return conversation
       })
 
       if (madeChange) {
         return newConversations
       } else {
-        // if !madeChange then create new conversation with new message
-        return [...prev, { recipients, messages: [newMessage] }]
+        return [
+          ...prevConversations,
+          { recipients, messages: [newMessage] }
+        ]
       }
     })
+  }, [setConversations])
 
-  }
+  //! CHECK FOR MESSAGES FROM SERVER
+  useEffect(() => {
+    if (socket == null) return
+    socket.on('recive-message', addMessageToConversation)
+    return () => socket.off('recive-message')
+  }, [socket, addMessageToConversation])
 
   function sendMessage(recipients, text) {
+    socket.emit('send-message', { recipients, text })
     addMessageToConversation({ recipients, text, sender: id })
   }
 
@@ -99,6 +136,7 @@ export function ConversationProvider({ id, children }) {
 }
 
 function arrayEquality(a, b) {
+  console.log('compare')
   if (a.length !== b.length) return false
 
   a.sort()
