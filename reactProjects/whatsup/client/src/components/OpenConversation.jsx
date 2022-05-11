@@ -25,9 +25,9 @@ const OpenConversation = () => {
           {selectedConversation.messages.map((message, index) => {
             const lastMessage = selectedConversation.messages.length - 1 === index
             return (
-              <div key={index} ref={lastMessage ? setRef : null} className={`my-1 d-flex flex-column ${message.fromMe ? 'align-self-end' : ''}`}>
+              <div key={index} ref={lastMessage ? setRef : null} className={`my-1 d-flex flex-column ${message.fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}>
                 <div className={`rounded px-2 py-1 ${message.fromMe ? 'bg-primary text-white' : 'border'}`}>{message.text}</div>
-                <div className={`text-muted small ${message.fromMe ? 'text-end' : ''}`}>{message.fromMe ? 'You' : message.sender.name}</div>
+                <div className={`text-muted small ${message.fromMe ? 'text-end' : ''}`}>{message.fromMe ? 'You' : message.senderName}</div>
               </div>
             )
           })}

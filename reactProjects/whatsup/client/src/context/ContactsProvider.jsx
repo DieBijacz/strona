@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 
 const ContactsContext = React.createContext()
@@ -18,9 +18,15 @@ export function ContactsProvider({ children }) {
     })
   }
 
+  function deleteContact(index) {
+    if (window.confirm('Do you want to delete this contact?')) {
+      setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contacts[index].id))
+    }
+  }
+
   return (
     // provides contacts and function to create contact to all childrens
-    <ContactsContext.Provider value={{ contacts, createContact }}>
+    <ContactsContext.Provider value={{ contacts, createContact, deleteContact }}>
       {children}
     </ContactsContext.Provider>
   )

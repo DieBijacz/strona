@@ -26,30 +26,6 @@ export function ConversationProvider({ id, children }) {
   }
 
   //! ADD MESSAGE
-  // const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
-  //   setConversations(prevConversations => {
-  //     let madeChange = false // will determinate if this is a new conversation
-  //     const newMessage = { sender, text }
-
-  //     // check if there is conversation with passed in recipients
-  //     const newConversations = prevConversations.map(conversation => {
-  //       if (arrayEquality(conversation.recipients, recipients)) { //checks if array of passed recipients is equal to any conversation
-  //         madeChange = true
-  //         console.log('old')
-  //         return { ...conversation, messages: [...conversation.messages, newMessage] } // add new message to previous conversation
-  //       }
-  //       return conversation
-  //     })
-
-  //     if (madeChange) {
-  //       console.log('new')
-  //       return newConversations
-  //     } else {
-  //       // if !madeChange then create new conversation with new message
-  //       return [...prevConversations, { recipients, messages: [newMessage] }]
-  //     }
-  //   })
-  // }, [setConversations])
   const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
     setConversations(prevConversations => {
       let madeChange = false
