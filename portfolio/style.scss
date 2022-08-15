@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Heebo', sans-serif;
+}
+
+$dark-color: #0D1117;
+$main-color: #2C394B;
+$light-color: #334756;
+$grey-color: #D2D2D2;
+$accent-color: #FF4C29;
+$green-4: #39D353;
+$green-3: #26A641;
+$green-2: #006D32;
+$green-1: #0E4429;
+$green-00: #161B22;
+
+section {
+  height: 100vh;
+  background-color: $grey-color;
+
+  &:nth-child(2n) {
+    background-color: $dark-color;
+    color: #D2D2D2;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  padding: 1rem 0;
+  width: calc(min(1600px, 90%));
+  height: 100%;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  display: none;
+  // HERE
+
+  .logo {
+    width: 100px;
+    height: 100px;
+    background-color: $dark-color;
+    color: #D2D2D2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 3rem;
+    line-height: 2.6rem;
+    font-weight: bold;
+  }
+
+  .name {
+    padding: 5rem 0;
+    font-size: 10rem;
+    line-height: 9rem;
+    color: $dark-color;
+    text-align: start;
+
+    p {
+      font-size: 3rem;
+      line-height: 2rem;
+      width: 100%;
+      text-align: end;
+      font-weight: 100;
+    }
+
+    .menu {
+      font-size: 2rem;
+      font-weight: 100;
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+      width: 400px;
+
+      a {
+        margin-top: 10px;
+        border-bottom: #082032 1px solid;
+        text-decoration: none;
+        color: $dark-color;
+        transition: .2s;
+
+        &:hover {
+          color: $accent-color;
+        }
+      }
+    }
+  }
+
+  .bottom-line {
+    color: $main-color;
+    font-size: 1rem;
+    font-weight: bold;
+    border-top: 2px solid $main-color;
+    border-bottom: 2px solid $main-color;
+    display: flex;
+    justify-content: space-around;
+
+    span {
+      font-weight: 100;
+      margin: 0 1rem;
+    }
+  }
+}
+
+.snake {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+
+  #game-board {
+    width: 742px;
+    height: 100px;
+    background-color: $dark-color;
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    grid-template-columns: repeat(52, 1fr);
+
+    .snake {
+      background-color: $accent-color;
+      border-radius: 20%;
+      border: solid 1px $dark-color;
+    }
+
+    .food {
+      border: solid 1px $dark-color;
+      border-radius: 20%;
+      background-color: $green-3;
+    }
+  }
+}
