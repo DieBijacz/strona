@@ -1,8 +1,10 @@
 const request = require('request')
 const cheerio = require('cheerio')
+const _ = require('lodash');
 
 const user = 'dieBijacz'
 const format = 'count'
+const values = []
 
 request.get(`https://github.com/${user}`, (error, response, body) => {
 
@@ -14,16 +16,14 @@ request.get(`https://github.com/${user}`, (error, response, body) => {
     }
   }
 
-  // Parse github profile page
   const $ = cheerio.load(body);
-  const data = $('rect').get().reduce((data, rect) => {
-    // Parse contributions value
+  $('rect').get().reduce((data, rect) => {
     const value = (() => {
       const count = $(rect).data('count');
-      if (format === 'activity') return count > 0;
-      if (format === 'count') return count;
+      const date = $(rect).data('date')
+      return { count, date };
     })();
-    console.log(value)
-
+    values.push(value)
   }, {});
+  console.log(values)
 })
