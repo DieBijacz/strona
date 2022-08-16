@@ -24,6 +24,33 @@ section:nth-child(2n) {
   height: 100%;
 }
 
+.btn {
+  cursor: pointer;
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem;
+  border-radius: 100vw;
+  -webkit-transition: 300ms;
+  transition: 300ms;
+}
+
+.btn-accent {
+  background-color: #0D1117;
+  color: #FF4C29;
+}
+
+.btn-accent:hover {
+  background-color: #FF4C29;
+  color: #D2D2D2;
+}
+
+.btn-dark {
+  background-color: #0D1117;
+  color: #D2D2D2;
+}
+
 .hero {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -32,7 +59,6 @@ section:nth-child(2n) {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  display: none;
 }
 
 .hero .logo {

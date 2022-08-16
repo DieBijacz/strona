@@ -6,17 +6,21 @@ let gameOver = false
 
 const gameBoard = document.querySelector('#game-board')
 
-window.addEventListener(
-  "keydown",
-  (e) => {
-    if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
-      e.preventDefault();
-    }
-  },
-  false
-);
+//initial game start
+document.querySelector('#start-snake').addEventListener('click', () => {
+  window.requestAnimationFrame(main)
+  window.addEventListener(
+    "keydown",
+    (e) => {
+      if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+        e.preventDefault();
+      }
+    },
+    false
+  );
+})
 
-window.requestAnimationFrame(main) //initial game start
+
 
 function main(currentTime) {
   if (gameOver) {

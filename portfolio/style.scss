@@ -35,11 +35,35 @@ section {
   height: 100%;
 }
 
+.btn {
+  cursor: pointer;
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem;
+  border-radius: 100vw;
+  transition: 300ms;
+}
+
+.btn-accent {
+  background-color: $dark-color;
+  color: $accent-color;
+
+  &:hover {
+    background-color: $accent-color;
+    color: $grey-color;
+  }
+}
+
+.btn-dark {
+  background-color: $dark-color;
+  color: $grey-color;
+}
+
 .hero {
   display: flex;
   flex-direction: column;
-  display: none;
-  // HERE
 
   .logo {
     width: 100px;
